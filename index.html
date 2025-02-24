@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge PDFs</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Upload and Merge PDFs</h2>
+    <input type="file" id="fileInput" multiple accept="application/pdf">
+    <button onclick="mergePDFs()">Merge PDFs</button>
+    
+    <script>
+        async function mergePDFs() {
+            const input = document.getElementById('fileInput');
+            if (input.files.length === 0) {
+                alert('Please select at least one PDF file.');
+                return;
+            }
+            
+            const pdfDoc = await PDFLib.PDFDocument.create();
+            for (const file of input.files) {
+                const arrayBuffer = await file.arrayBuffer();
+                const loadedPdf = await PDFLib.PDFDocument.load(arrayBuffer);
+                const copiedPages = await pdfDoc.copyPages(loadedPdf, loadedPdf.getPageIndices());
+                copiedPages.forEach(page => pdfDoc.addPage(page));
+            }
+            
+            const mergedPdfBytes = await pdfDoc.save();
+            const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'merged.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
