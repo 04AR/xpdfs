@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - XPDF</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        body {
+            background-color: #f4e7c3;
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            color: #5a3d2b;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #dab371;
+            border: 4px solid #5a3d2b;
+            box-shadow: 8px 8px 0px #5a3d2b;
+        }
+        h1 {
+            font-size: 20px;
+        }
+        input, textarea {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 3px solid #5a3d2b;
+            background: #fff7db;
+            font-family: 'Press Start 2P', cursive;
+        }
+        .btn {
+            display: inline-block;
+            background: #d9534f;
+            color: white;
+            padding: 10px 20px;
+            border: 3px solid #5a3d2b;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 4px 4px 0px #5a3d2b;
+        }
+        .btn:hover {
+            background: #b52b27;
+        }
+        .nav {
+            text-align: left;
+            padding: 10px;
+        }
+        .nav a {
+            color: #6F5643;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="index.html">&#8592; Back to Home</a>
+    </div>
+    <div class="container">
+        <h1>Contact Us</h1>
+        <p>Have questions? Reach out to us!</p>
+        <form>
+            <input type="text" placeholder="Your Name" required><br>
+            <input type="email" placeholder="Your Email" required><br>
+            <textarea rows="4" placeholder="Your Message" required></textarea><br>
+            <button type="submit" class="btn">Send</button>
+        </form>
+    </div>
+</body>
+</html>

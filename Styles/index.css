@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    background-color: #222;
+    color: #6F5643;
+    font-family: "Press Start 2P", monospace;
+    text-align: center;
+    background: #ECE6C2;
+}
+
+
+.navbar {
+    background-color: #dab371;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #fff;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+    /* Adds a retro font */
+}
+
+.navbar a {
+    color: #dc5341;
+    text-decoration: none;
+    font-size: 13px;
+    margin: 0 15px;
+
+    gap: 2px;
+    /* Adds spacing between the icon and text */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* Retro Hover Effect */
+.navbar a:hover {
+    color: #8b0000;
+    transform: scale(1.1);
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon Styling */
+.navbar i {
+    font-size: 13px;
+}
+
+
+.file-drop-area {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 12px;
+    /* Adds space between text and file input */
+}
+
+.file-drop-text {
+    display: block;
+    margin-bottom: 20px;
+    /* Space between Drag & Drop text and file input */
+}
+
+#fileInput {
+    display: block;
+    margin: 0 auto;
+    /* Centers the file input */
+    padding: 10px;
+    border: 2px solid;
+    box-shadow: 0px 2px 0px #6F5643;
+}
+
+
+.container {
+    margin: 50px auto;
+    width: 85%;
+    max-width: 750px;
+    padding: 20px;
+    border: 4px solid #070707;
+    box-shadow: 5px 5px 0px #070707;
+
+
+}
+
+.pixel-button {
+    background-color: #dc5341;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: 4px solid #000;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000;
+    transition: all 0.2s ease-in-out;
+}
+
+.pixel-button:active {
+    box-shadow: 2px 2px 0px #000;
+    transform: translate(2px, 2px);
+}
+
+.loading {
+    display: none;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+.icon {
+    width: 50px;
+    margin-top: 20px;
+}
+
+.icon:hover {
+    transform: scale(1.2);
+}
+
+button:hover {
+    background: linear-gradient(to right, #ff3b30, #ff6f61);
+    transform: scale(1.05);
+}
