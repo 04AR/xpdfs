@@ -1,121 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Merge PDFs with Reorder</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    h2 {
-      margin-bottom: 20px;
-    }
-    input, button {
-      margin: 10px;
-      padding: 10px;
-    }
-    #fileList {
-      list-style: none;
-      padding: 0;
-      width: 300px;
-      border: 1px solid #ccc;
-      background-color: #fff;
-      margin-bottom: 20px;
-    }
-    #fileList li {
-      padding: 10px;
-      border-bottom: 1px solid #ccc;
-      cursor: move;
-      user-select: none;
-    }
-    #fileList li:last-child {
-      border-bottom: none;
-    }
-    /* Optional: styling for the dragged element */
-    .sortable-ghost {
-      opacity: 0.4;
-    }
-  </style>
-  <!-- pdf-lib for PDF merging -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-  <!-- SortableJS for drag-and-drop -->
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro PDF Merger</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://unpkg.com/pdf-lib@1.4.0"></script>
+    <link rel="stylesheet" href="Styles/index.css">
+
+
+    
 </head>
+
 <body>
-  <h2>Upload and Merge PDFs</h2>
-  <input type="file" id="fileInput" multiple accept="application/pdf">
-  <ul id="fileList"></ul>
-  <button onclick="mergePDFs()">Merge PDFs</button>
-  
-  <script>
-    // Map to store file objects by a unique id.
-    let fileMap = {};
-    let fileIdCounter = 0;
+    
+    <div class="navbar">
+        <span class="logo">xpdf</span>
+        <div class="nav-links">
+            <a href="#"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="Pages/about.html"><i class="fa-solid fa-user"></i> About</a>
+            <a href="Pages/contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+        </div>
+    </div>
+    
 
-    const fileInput = document.getElementById('fileInput');
-    const fileList = document.getElementById('fileList');
+    <div class="container">
+        <h4>Upload and Merge Your Files with Ease! </h4>
+        <h5>PDFs, PPTs, and DOCX in Seconds</h5>
+        <h5> Fast and Secure</h5>
+        <div class="file-drop-area" id="drop-zone">
+            <span class="file-drop-text">Drag & Drop your files here or <label for="fileInput"
+                    style="cursor: pointer; color: #dc5341;">Browse</label></span>
+            <div class="file-input-wrapper">
+                <input type="file" id="fileInput" multiple accept="application/pdf">
+            </div>
+        </div>
 
-    // When files are selected, list them and store in fileMap.
-    fileInput.addEventListener('change', () => {
-      // Clear any previous entries.
-      fileList.innerHTML = '';
-      fileMap = {};
-      fileIdCounter = 0;
 
-      const files = Array.from(fileInput.files);
-      files.forEach(file => {
-        const id = 'file-' + fileIdCounter++;
-        fileMap[id] = file;
+        <br><br>
+        <button class="pixel-button" onclick="mergePDFs()">Merge PDFs</button>
+        <p class="loading" id="loadingText">Merging PDFs... Please wait.</p>
+    </div>
 
-        const li = document.createElement('li');
-        li.textContent = file.name;
-        li.setAttribute('data-id', id);
-        fileList.appendChild(li);
-      });
-    });
+    <ul id="fileList"></ul>
+    <!-- <button onclick="mergePDFs()">Merge PDFs</button> -->
 
-    // Enable drag-and-drop reordering using SortableJS.
-    Sortable.create(fileList, {
-      animation: 150,
-      ghostClass: 'sortable-ghost'
-    });
+    <script>
+        // Map to store file objects by a unique id.
+        let fileMap = {};
+        let fileIdCounter = 0;
 
-    async function mergePDFs() {
-      if (Object.keys(fileMap).length === 0) {
-        alert('Please select at least one PDF file.');
-        return;
-      }
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('drop-zone');
+        const fileList = document.getElementById('fileList');
 
-      // Get the current order of file IDs from the list.
-      const orderedIds = Array.from(fileList.children).map(li => li.getAttribute('data-id'));
+        // When files are selected, list them and store in fileMap.
+        fileInput.addEventListener('change', () => {
+            // Clear any previous entries.
+            fileList.innerHTML = '';
+            fileMap = {};
+            fileIdCounter = 0;
 
-      // Create a new PDF document to hold merged pages.
-      const mergedPdf = await PDFLib.PDFDocument.create();
+            const files = Array.from(fileInput.files);
+            files.forEach(file => {
+                const id = 'file-' + fileIdCounter++;
+                fileMap[id] = file;
 
-      // Loop through the files in the user-defined order.
-      for (const id of orderedIds) {
-        const file = fileMap[id];
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
-        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        copiedPages.forEach(page => mergedPdf.addPage(page));
-      }
+                const li = document.createElement('li');
+                li.textContent = file.name;
+                li.setAttribute('data-id', id);
+                fileList.appendChild(li);
+            });
+        });
+        // Drag and Drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('highlight');
+        });
 
-      const mergedPdfBytes = await mergedPdf.save();
-      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'merged.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  </script>
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('highlight');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('highlight');
+
+            const files = e.dataTransfer.files;
+            Array.from(files).forEach(file => addFile(file));
+        });
+
+        // Enable drag-and-drop reordering using SortableJS.
+        Sortable.create(fileList, {
+            animation: 150,
+            ghostClass: 'sortable-ghost'
+        });
+
+        async function mergePDFs() {
+            if (Object.keys(fileMap).length === 0) {
+                alert('Please select at least one PDF file.');
+                return;
+            }
+
+            // Get the current order of file IDs from the list.
+            const orderedIds = Array.from(fileList.children).map(li => li.getAttribute('data-id'));
+
+            // Create a new PDF document to hold merged pages.
+            const mergedPdf = await PDFLib.PDFDocument.create();
+
+            // Loop through the files in the user-defined order.
+            for (const id of orderedIds) {
+                const file = fileMap[id];
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+                const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                copiedPages.forEach(page => mergedPdf.addPage(page));
+            }
+
+            const mergedPdfBytes = await mergedPdf.save();
+            const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'merged.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
+
 </html>
